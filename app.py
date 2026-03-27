@@ -753,3 +753,10 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
 
 if __name__ == "__main__":
     app.launch()
+
+import os
+
+if __name__ == "__main__":
+    # This finds the port Render assigns to your app
+    port = int(os.environ.get("PORT", 7860))
+    app.launch(server_name="0.0.0.0", server_port=port)
