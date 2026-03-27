@@ -1,2 +1,2 @@
-gradio
-plotly
+gradio>=4.0.0
+plotly>=5.0.0
