@@ -23,7 +23,8 @@ def init_db():
             score_digital INTEGER, score_overall INTEGER,
             risk_label TEXT
         )
-    """)
+    """
+    )
     conn.commit()
     conn.close()
 
@@ -202,7 +203,7 @@ def make_bars(scores):
         yaxis=dict(autorange='reversed'),
         margin=dict(t=10, b=10, l=10, r=40), height=200,
         paper_bgcolor='white', plot_bgcolor='white',
-        font=dict(family='sans-serif', size=13))
+        f_font=dict(family='sans-serif', size=13))
     return fig
 
 
@@ -305,17 +306,17 @@ def render_summary(name, age, gender, institution, sleep_hours,
         if k == "Overall": continue
         c = "#1D9E75" if v < 35 else "#BA7517" if v < 65 else "#E24B4A"
         domain_cards += (
-            f'<div style="background:white;border-radius:10px;padding:10px 16px;'
-            f'border:1px solid #eee;min-width:120px">'
-            f'<div style="font-size:11px;color:#999;margin-bottom:2px">{k}</div>'
-            f'<div style="font-size:20px;font-weight:700;color:{c}">{v}</div></div>'
+            f"<div style='background:white;border-radius:10px;padding:10px 16px;"
+            f"border:1px solid #eee;min-width:120px'>"
+            f"<div style='font-size:11px;color:#999;margin-bottom:2px'>{k}</div>"
+            f"<div style='font-size:20px;font-weight:700;color:{c}'>{v}</div></div>"
         )
     total_hrs = sleep_hours + study_hours + screen_time
     warn = ""
     if total_hrs > 24:
-        warn = (f'<div style="background:#fce8e8;border-radius:8px;padding:8px 14px;'
-                f'margin-top:10px;font-size:13px;color:#c0392b">'
-                f' Sleep + Study + Screen = <b>{total_hrs}h</b> — exceeds 24h!</div>')
+        warn = (f"<div style='background:#fce8e8;border-radius:8px;padding:8px 14px;"
+                f"margin-top:10px;font-size:13px;color:#c0392b'>"
+                f" Sleep + Study + Screen = <b>{total_hrs}h</b> — exceeds 24h!</div>")
     lbl, clr = risk_label(scores["Overall"])
     return f"""
     <div style="font-family:sans-serif;padding:20px 24px;
@@ -342,17 +343,17 @@ def render_summary(name, age, gender, institution, sleep_hours,
 def render_recs(recs):
     pc = {"URGENT": "#fce8e8", "HIGH": "#fef3e2", "LOW": "#e8f4fb", "GOOD": "#e8f8f0"}
     pb = {"URGENT": "#f5a0a0", "HIGH": "#f5c97a", "LOW": "#7ec8e3", "GOOD": "#7dd5a8"}
-    ic = {"URGENT":  "HIGH", "LOW", "GOOD"}
+    ic = {"URGENT": "", "HIGH": "", "LOW": "", "GOOD": ""}
     html = "<div style='font-family:sans-serif;display:flex;flex-direction:column;gap:10px'>"
     for priority, title, body in recs:
         html += (
-            f'<div style="background:{pc.get(priority,"#f5f5f5")};'
-            f'border-left:4px solid {pb.get(priority,"#ddd")};'
-            f'border-radius:0 12px 12px 0;padding:12px 16px">'
-            f'<div style="font-size:11px;font-weight:700;color:#777;margin-bottom:3px">'
-            f'{ic.get(priority,"")} {priority}</div>'
-            f'<div style="font-size:14px;font-weight:700;color:#222;margin-bottom:4px">{title}</div>'
-            f'<div style="font-size:13px;color:#444;line-height:1.6">{body}</div></div>'
+            f"<div style='background:{pc.get(priority,"#f5f5f5")};"
+            f"border-left:4px solid {pb.get(priority,"#ddd")};"
+            f"border-radius:0 12px 12px 0;padding:12px 16px'>"
+            f"<div style='font-size:11px;font-weight:700;color:#777;margin-bottom:3px'>"
+            f"{ic.get(priority,"")} {priority}</div>"
+            f"<div style='font-size:14px;font-weight:700;color:#222;margin-bottom:4px'>{title}</div>"
+            f"<div style='font-size:13px;color:#444;line-height:1.6'>{body}</div></div>"
         )
     html += "</div>"
     return html
@@ -371,20 +372,20 @@ def render_user_history_html(rows, student_name=""):
     for r in rows:
         lbl, clr = risk_label(r["score_overall"])
         html += (
-            f'<div style="background:white;border-radius:10px;padding:12px 16px;'
-            f'border:1px solid #eee;box-shadow:0 1px 4px rgba(0,0,0,0.05)">'
-            f'<div style="display:flex;justify-content:space-between;align-items:center">'
-            f'<span style="font-size:13px;color:#555">{r["timestamp"]}</span>'
-            f'<span style="font-size:13px;font-weight:700;color:{clr}">'
-            f'{lbl} ({r["score_overall"]}/100)</span></div>'
-            f'<div style="margin-top:8px;display:flex;gap:16px;font-size:12px;color:#777">'
-            f'<span>Sleep: <b style="color:#534AB7">{r["score_sleep"]}</b></span>'
-            f'<span>Academic: <b style="color:#534AB7">{r["score_academic"]}</b></span>'
-            f'<span>Digital: <b style="color:#534AB7">{r["score_digital"]}</b></span></div>'
-            f'<div style="margin-top:6px;font-size:12px;color:#aaa">'
-            f'Sleep {r["sleep_hours"]}h · Study {r["study_hours"]}h · '
-            f'Screen {r["screen_time"]}h · Gaming {r["gaming_hrs"]}h · '
-            f'Attendance {r["attendance"]}%</div></div>'
+            f"<div style='background:white;border-radius:10px;padding:12px 16px;"
+            f"border:1px solid #eee;box-shadow:0 1px 4px rgba(0,0,0,0.05)'>"
+            f"<div style='display:flex;justify-content:space-between;align-items:center'>"
+            f"<span style='font-size:13px;color:#555'>{r["timestamp"]}</span>"
+            f"<span style='font-size:13px;font-weight:700;color:{clr}'>"
+            f"{lbl} ({r["score_overall"]}/100)</span></div>"
+            f"<div style='margin-top:8px;display:flex;gap:16px;font-size:12px;color:#777'>"
+            f"<span>Sleep: <b style='color:#534AB7'>{r["score_sleep"]}</b></span>"
+            f"<span>Academic: <b style='color:#534AB7'>{r["score_academic"]}</b></span>"
+            f"<span>Digital: <b style='color:#534AB7'>{r["score_digital"]}</b></span></div>"
+            f"<div style='margin-top:6px;font-size:12px;color:#aaa'>"
+            f"Sleep {r["sleep_hours"]}h · Study {r["study_hours"]}h · "
+            f"Screen {r["screen_time"]}h · Gaming {r["gaming_hrs"]}h · "
+            f"Attendance {r["attendance"]}%</div></div>"
         )
     html += "</div>"
     return html
@@ -487,7 +488,7 @@ INTRO_HTML = """
     </div>
   </div>
   <div style="font-size:13px;color:#888;margin-bottom:8px">
-     Go to the <b style="color:#534AB7">Assessment</b> tab to get started
+    --> Go to the <b style="color:#534AB7">Assessment</b> tab to get started
   </div>
 </div>
 """
@@ -501,7 +502,7 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
 
     with gr.Tabs() as tabs:
 
-        # ── TAB 1: HOME ───────────────────────────────────────
+        # -- TAB 1: HOME ---------------------------------------
         with gr.Tab(" Home"):
             gr.HTML(INTRO_HTML)
             gr.HTML("""
@@ -528,16 +529,18 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
                 </div>
               </div>
             </div>
-            """)
+            """
+            )
 
-        # ── TAB 2: ASSESSMENT ─────────────────────────────────
+        # -- TAB 2: ASSESSMENT ---------------------------------
         with gr.Tab(" Assessment"):
-            gr.HTML('<div style="font-family:sans-serif;font-size:13px;font-weight:600;'
-                    'color:#4f46e5;background:#eef0ff;display:inline-block;padding:4px 14px;'
-                    'border-radius:12px;margin-bottom:12px">FILL IN YOUR DETAILS BELOW</div>')
+            gr.HTML("""<div style="font-family:sans-serif;font-size:13px;font-weight:600;
+                    color:#4f46e5;background:#eef0ff;display:inline-block;padding:4px 14px;
+                    border-radius:12px;margin-bottom:12px">FILL IN YOUR DETAILS BELOW</div>"""
+                    )
 
             # Profile section
-            gr.Markdown("### 👤 Your Profile")
+            gr.Markdown("### Your Profile")
             with gr.Row():
                 name        = gr.Textbox(label="Full name", placeholder="e.g. Aryan Sharma")
                 age         = gr.Number(label="Age", value=18, minimum=10, maximum=30)
@@ -555,7 +558,7 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
             gr.HTML('<hr style="border:none;border-top:1px solid #eee;margin:16px 0">')
 
             # Sleep section
-            gr.Markdown("###  Sleep")
+            gr.Markdown("### Sleep")
             with gr.Row():
                 sleep_hours   = gr.Slider(0, 12, value=6.5, step=0.5,
                                           label="Sleep hours per night")
@@ -566,7 +569,7 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
             gr.HTML('<hr style="border:none;border-top:1px solid #eee;margin:16px 0">')
 
             # Academic section
-            gr.Markdown("###  Academic")
+            gr.Markdown("### Academic")
             with gr.Row():
                 attendance  = gr.Slider(0, 100, value=72, step=1, label="Attendance (%)")
                 study_hours = gr.Slider(0, 12,  value=3,  step=0.5, label="Study hours per day")
@@ -581,9 +584,9 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
 
             gr.HTML('<hr style="border:none;border-top:1px solid #eee;margin:16px 0">')
 
-            btn_calculate = gr.Button(" Calculate My Risk Score", variant="primary", size="lg")
+            btn_calculate = gr.Button("  Calculate My Risk Score", variant="primary", size="lg")
 
-        # ── TAB 3: MY RESULTS ─────────────────────────────────
+        # -- TAB 3: MY RESULTS ---------------------------------
         with gr.Tab(" My Results"):
             summary_out  = gr.HTML("<p style='color:#aaa;font-family:sans-serif;padding:20px;"
                                    "text-align:center'>Complete the Assessment tab first to see your results.</p>")
@@ -593,7 +596,7 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
             with gr.Row():
                 radar_out = gr.Plot(label="Risk Profile")
                 pie_out   = gr.Plot(label="Your 24-Hour Day")
-            gr.Markdown("###  Your Action Plan")
+            gr.Markdown("### Your Action Plan")
             recs_out = gr.HTML()
             gr.HTML("""
             <div style="font-family:sans-serif;margin-top:20px;padding:14px 18px;
@@ -602,30 +605,33 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
               <b style="color:#534AB7">Remember:</b> This tool gives indicators, not diagnoses.
               Speak to a counsellor if you are in distress.<br>
               <span style="color:#aaa">iCall India: 9152987821 &nbsp;·&nbsp; Vandrevala: 1860-2662-345</span>
-            </div>""")
+            </div>"""
+            )
 
-        # ── TAB 4: MY HISTORY ─────────────────────────────────
-        with gr.Tab("My History"):
-            gr.HTML('<div style="font-family:sans-serif;font-size:13px;color:#444;'
-                    'background:#eef8f4;padding:10px 14px;border-radius:8px;'
-                    'margin-bottom:14px;border:1px solid #b2dfce">'
-                    '<b>Private:</b> You only see your own records here.</div>')
+        # -- TAB 4: MY HISTORY ---------------------------------
+        with gr.Tab(" My History"):
+            gr.HTML("""<div style="font-family:sans-serif;font-size:13px;color:#444;
+                    background:#eef8f4;padding:10px 14px;border-radius:8px;
+                    margin-bottom:14px;border:1px solid #b2dfce">
+                    <b>Private:</b> You only see your own records here.</div>"""
+                    )
             btn_refresh = gr.Button("  Refresh My History", variant="secondary")
             trend_out   = gr.Plot(label="Risk Score Over Time")
             hist_out    = gr.HTML()
 
-        # ── TAB 5: ADMIN ──────────────────────────────────────
+        # -- TAB 5: ADMIN --------------------------------------
         with gr.Tab(" Admin"):
-            gr.HTML('<div style="font-family:sans-serif;font-size:13px;color:#444;'
-                    'background:#fef3e2;padding:10px 14px;border-radius:8px;'
-                    'margin-bottom:14px;border:1px solid #f5c97a">'
-                    '<b>Admin only:</b> Shows all student records.</div>')
-            btn_admin      = gr.Button(" Load All Records", variant="secondary")
+            gr.HTML("""<div style="font-family:sans-serif;font-size:13px;color:#444;
+                    background:#fef3e2;padding:10px 14px;border-radius:8px;
+                    margin-bottom:14px;border:1px solid #f5c97a">
+                    <b>Admin only:</b> Shows all student records.</div>"""
+                    )
+            btn_admin      = gr.Button("  Load All Records", variant="secondary")
             admin_stats    = gr.HTML()
             admin_chart    = gr.Plot(label="Risk Distribution")
             admin_table    = gr.HTML()
 
-    # ── EVENT HANDLERS ────────────────────────────────────────
+    # -- EVENT HANDLERS ----------------------------------------
 
     btn_calculate.click(
         run_prediction,
@@ -648,11 +654,11 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
         rows  = db_all_history()
         total, avg, hi, lo, label_counts = db_stats()
         stats = (
-            '<div style="font-family:sans-serif;display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px">'
+            "<div style='font-family:sans-serif;display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px>"
             + "".join(
-                f'<div style="background:#f8f7ff;border-radius:10px;padding:12px 18px;border:1px solid #ede9ff">'
-                f'<div style="font-size:11px;color:#999">{lbl}</div>'
-                f'<div style="font-size:20px;font-weight:700;color:#534AB7">{val}</div></div>'
+                f"<div style='background:#f8f7ff;border-radius:10px;padding:12px 18px;border:1px solid #ede9ff'>"
+                f"<div style='font-size:11px;color:#999'>{lbl}</div>"
+                f"<div style='font-size:20px;font-weight:700;color:#534AB7'>{val}</div></div>"
                 for lbl, val in [("Total Assessments", total),
                                   ("Avg Score", f"{avg:.1f}"),
                                   ("Highest", hi),
