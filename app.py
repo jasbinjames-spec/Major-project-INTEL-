@@ -1,6 +1,7 @@
 import gradio as gr
 import plotly.graph_objects as go
 import sqlite3
+import os
 from datetime import datetime
 
 # -----------------------------------------
@@ -66,7 +67,6 @@ def db_save(name, age, gender, institution, living,
 
 
 def db_user_history(name):
-    """Return list of dicts for a given user (last 20) - viewer sees ONLY their own."""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     rows = conn.execute("""
@@ -82,7 +82,6 @@ def db_user_history(name):
 
 
 def db_all_history():
-    """Return all rows as list of dicts (admin only)."""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     rows = conn.execute(
@@ -93,7 +92,6 @@ def db_all_history():
 
 
 def db_stats():
-    """Aggregate stats for admin dashboard."""
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("SELECT COUNT(*), AVG(score_overall), MAX(score_overall), MIN(score_overall) FROM assessments")
@@ -233,7 +231,6 @@ def make_pie(sleep_hours, study_hours, screen_time, gaming_hrs):
 
 
 def make_trend_chart(history):
-    """Line chart of overall score over time for a user."""
     if not history:
         return go.Figure()
     dates  = [r["timestamp"][:10] for r in reversed(history)]
@@ -386,11 +383,10 @@ def run_prediction(name, age, gender, institution, living_situation,
 
 
 # -----------------------------------------
-#  HISTORY HELPERS (for UI)
+#  HISTORY HELPERS
 # -----------------------------------------
 
 def render_user_history_html(rows, student_name=""):
-    """Renders history cards for a single user - viewers only see their own records."""
     if not rows:
         if student_name:
             msg = (f"No assessments found for <b>{student_name}</b>. "
@@ -596,7 +592,6 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
 
         with gr.Tabs():
 
-            # TAB 1: RESULTS
             with gr.Tab("My Results"):
                 gr.HTML('<div class="tag-pill">YOUR DAILY RISK REPORT</div>')
                 summary_html_out = gr.HTML()
@@ -621,7 +616,6 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
                   </span>
                 </div>""")
 
-            # TAB 2: MY HISTORY (viewer sees ONLY their own records)
             with gr.Tab("My History"):
                 gr.Markdown("### Your Assessment History")
                 gr.HTML(
@@ -636,7 +630,6 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
                 my_trend_out        = gr.Plot(label="My Risk Score Over Time")
                 my_hist_html        = gr.HTML()
 
-            # TAB 3: ADMIN - ALL RECORDS
             with gr.Tab("Admin - All Records"):
                 gr.Markdown("### All Assessment Records (Admin View)")
                 gr.HTML(
@@ -674,7 +667,6 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
     btn_a_next.click(lambda: show_sec(2), outputs=[sec_sleep, sec_academic, sec_digital])
     btn_d_back.click(lambda: show_sec(1), outputs=[sec_sleep, sec_academic, sec_digital])
 
-    # CALCULATE
     def on_calculate(name, age, gender, institution, living_situation,
                      sleep_hours, sleep_quality, nap_freq,
                      attendance, study_hours, screen_time, gaming_hrs):
@@ -692,10 +684,7 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
             gr.update(visible=False),
             gr.update(visible=True),
             summary, gauge, radar, bars, pie, recs,
-            name,
-            name,
-            trend,
-            hist,
+            name, name, trend, hist,
         )
 
     btn_calculate.click(
@@ -709,7 +698,6 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
                  my_trend_out, my_hist_html]
     )
 
-    # REFRESH MY OWN HISTORY
     def on_refresh_my_hist(locked_name):
         rows  = db_user_history(locked_name)
         trend = make_trend_chart(rows)
@@ -722,7 +710,6 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
         outputs=[my_trend_out, my_hist_html]
     )
 
-    # ADMIN: LOAD ALL RECORDS
     def on_load_admin():
         rows  = db_all_history()
         total, avg, hi, lo, label_counts = db_stats()
@@ -751,12 +738,10 @@ with gr.Blocks(css=CSS, title="Digital Risk Prediction") as app:
                          outputs=[admin_stats_html, admin_chart_out, admin_table_html])
 
 
-if __name__ == "__main__":
-    app.launch()
+# -----------------------------------------
+#  LAUNCH  (works locally AND on Render)
+# -----------------------------------------
 
-import os
-
 if __name__ == "__main__":
-    # This finds the port Render assigns to your app
     port = int(os.environ.get("PORT", 7860))
     app.launch(server_name="0.0.0.0", server_port=port)
